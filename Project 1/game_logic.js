@@ -1,8 +1,8 @@
-import { car } from "./assets.js"
 import { environment } from "./assets.js"
 import {player } from "./assets.js"
+import { road_hazard } from "./assets.js"
 
-const car_model = car.car_model;
+const hazard = road_hazard.road_cone;
 const environment_box = environment.environment_box;
 const player_model = player.player_car;
 
@@ -82,31 +82,42 @@ function drawLine(x1, y1, x2, y2, color){
 const cubes = [{z: -10, color: "white"}, {z: -8, color: "white"}, {z: -6, color: "white"}, {z: -4, color: "white"}, {z: -2, color: "white"}, {z: 0, color: "white"}, {z: 2, color: "white"}, {z: 4, color: "white"}, {z: 6, color: "white"}, {z: 8, color: "white"}];
 
 let playerXOffset = 0;
+let spawnTimer = 0;
+const spawnInterval = 1000;
+let hasCrashed = false;
 
-function game_loop() {
+function game_loop(timestamp) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    document.addEventListener("keydown", (event) => {
+    if(moveRight && playerXOffset < 20) {
 
-      event.preventDefault();
-       switch (event.key) {
-        case "ArrowRight":
-          if(playerXOffset < 20 && camera.x < 0.70) {
-            playerXOffset += 0.001;
-            //camera.x += 0.001;
-          }
-          console.log(camera.x);
-          break;
-        case "ArrowLeft":
-          if(playerXOffset > -20 && camera.x > -0.70) {
-            playerXOffset -= 0.001;
-            //camera.x -= 0.001;
-          }
-          console.log(playerXOffset);
-          break;
-      }
-    });
+      playerXOffset += 1;
+
+    }
+
+    if(moveLeft && playerXOffset > -20) {
+
+      playerXOffset -= 1;
+
+    }
+
+    if (!lastTime) {
+
+      lastTime = timestamp;
+    }
+
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+    spawnTimer += deltaTime;
+
+    if(spawnTimer >= spawnInterval) {
+
+      spawnHazard();
+      spawnTimer = 0;
+      console.log("Spawning Hazard");
+
+    }
 
     if(camera.z >= 0) {
       camera.z = -100;
@@ -115,10 +126,38 @@ function game_loop() {
 
         cube.z -= 100;
       }
+
+      for(let hazardInstance of hazards) {
+
+        hazardInstance.z -= 100;
+      }
     }
     else {
-      camera.z += .1;
-      draw(player_model, playerXOffset, -14, camera.z + 20, 0.4, "red", -80, 0);  
+      if(!hasCrashed) {
+        camera.z += .1;
+      }
+      draw(player_model, playerXOffset, -14, camera.z + 20, 0.4, "red", -80, 0);
+    }
+
+    for(const hazardInstance of hazards) {
+
+      if(hazardInstance.z < camera.z) {
+
+        hazards.shift();
+
+      }
+
+      else {
+
+        draw(hazard, hazardInstance.x, -14, hazardInstance.z, .2, "orange", 0, 0);
+
+      }
+
+      if(checkCollision(hazardInstance)) {
+
+        hasCrashed = true;
+      }
+
     }
 
     for(let cube of cubes) {
@@ -146,46 +185,65 @@ function game_loop() {
     
 }
 
-//draw(player_model, 0, -14, 0, .5, "red", 350, 0);
+let lastTime = 0;
+
+const hazards = [];
+
+function spawnHazard() {
+
+  const lanes = [-13.5, 0, 13.5];
+
+  const lane = lanes[Math.floor(Math.random() * lanes.length)];
+
+  hazards.push({x: lane, z: camera.z + 100});
+}
+
+function checkCollision(hazardInstance) {
+
+  const xDistance = Math.abs(hazardInstance.x - playerXOffset);
+  const zDistance = Math.abs(hazardInstance.z - camera.z + 20);
+
+  if(hasCrashed) {
+
+    console.log("xDistance: ", xDistance);
+    console.log("zDistance: ", zDistance);
+
+  }
+
+
+  if(xDistance < 20 && zDistance < 35) {
+
+    return true;
+  }
+
+  return false;
+}
+
 resizeCanvas();
-game_loop();
 
-/*document.addEventListener("keydown", (event) => {
+let moveRight = false;
+let moveLeft = false;
 
-      event.preventDefault();
-       switch (event.key) {
-        case "ArrowUp":
-          camera.y += 1;
-          console.log("Arrow up");
-          console.log(camera.y);
-          break;
-        case "ArrowDown":
-          camera.y -= 1;
-          console.log("Arrow down");
-          break;
-        case "ArrowRight":
-          camera.x += 0.01;
-          console.log("Arrow right");
-          break;
-        case "ArrowLeft":
-          camera.x -= 0.01;
-          console.log("Arrow left");
-          break;
-        case "+":
-          camera.z += 0.01;
-          break;
-        case "-":
-          camera.z -= 0.01;
-          break;   
-      }
-    });
+document.addEventListener("keydown", (event) => {
 
-draw(car_model, 0, 0, 0, .5, "red");
+    if (event.key === "ArrowLeft") {
+        moveLeft = true;
+    }
 
+    if (event.key === "ArrowRight") {
+        moveRight = true;
+    }
+});
 
-/*draw(environment_box, -10, "white");
-draw(environment_box, -8, "white");
-draw(environment_box, -6, "white");
-draw(environment_box, -4, "white");
-draw(environment_box, -2, "white");
-draw(environment_box, 0, "white");*/
+document.addEventListener("keyup", (event) => {
+
+    if (event.key === "ArrowLeft") {
+        moveLeft = false;
+    }
+
+    if (event.key === "ArrowRight") {
+        moveRight = false;
+    }
+});
+
+requestAnimationFrame(game_loop);

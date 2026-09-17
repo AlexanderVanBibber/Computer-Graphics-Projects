@@ -366,3 +366,121 @@ export const environment = {
         ]
     }
 }
+
+export const road_hazard = {
+
+    road_cone: {
+        vertices: [
+            //Top board
+            { x:  -7.5,  y: 5,  z: 1}, //Top Left - 0
+            { x:  -7.5,  y: 3,  z: 1}, //Bottom Left - 1
+            { x:  7.5,  y: 5,  z: 1}, //Top Right - 2
+            { x:  7.5,  y: 3,  z: 1}, //Bottom Right - 3
+            //Middle Board
+            { x:  -7.5,  y: 2,  z: 1}, //Top Left - 4
+            { x:  -7.5,  y: 0,  z: 1}, //Bottom Left - 5
+            { x:  7.5,  y: 2,  z: 1}, //Top Right - 6
+            { x:  7.5,  y: 0,  z: 1}, //Bottom Right - 7
+            //Bottom Board
+            { x:  -7.5,  y: -1,  z: 1}, //Top Left - 8
+            { x:  -7.5,  y: -3,  z: 1}, //Bottom Left - 9
+            { x:  7.5,  y: -1,  z: 1}, //Top Right - 10
+            { x:  7.5,  y: -3,  z: 1}, //Bottom Right - 11
+            //Middle Thing
+            { x:  -4,  y: 5,  z: 1.3}, //Top Left - 12
+            { x:  -4,  y: -3,  z: 1}, //Bottom Left - 13
+            { x:  4,  y: 5,  z: 1.3}, //Top Right - 14
+            { x:  4,  y: -3,  z: 1}, //Bottom Right - 15
+            //Base
+            { x:  -4,  y: -7,  z: 1}, //Left Foot - 16
+            { x:  -7,  y: -7,  z: 1}, //Leftmost point - 17
+            { x:  4,  y: -7,  z: 1}, //Right Foot - 18
+            { x:  7,  y: -7,  z: 1}, //Rightmost Foot - 19
+
+            //Top board back
+            { x:  -7.5,  y: 5,  z: 1.3}, //Top Left - 20
+            { x:  -7.5,  y: 3,  z: 1.3}, //Bottom Left - 21
+            { x:  7.5,  y: 5,  z: 1.3}, //Top Right - 22
+            { x:  7.5,  y: 3,  z: 1.3}, //Bottom Right - 23
+            //Middle Board back
+            { x:  -7.5,  y: 2,  z: 1.3}, //Top Left - 24
+            { x:  -7.5,  y: 0,  z: 1.3}, //Bottom Left - 25
+            { x:  7.5,  y: 2,  z: 1.3}, //Top Right - 26
+            { x:  7.5,  y: 0,  z: 1.3}, //Bottom Right - 27
+            //Bottom Board back
+            { x:  -7.5,  y: -1,  z: 1.3}, //Top Left - 28
+            { x:  -7.5,  y: -3,  z: 1.3}, //Bottom Left - 29
+            { x:  7.5,  y: -1,  z: 1.3}, //Top Right - 30
+            { x:  7.5,  y: -3,  z: 1.3}, //Bottom Right - 31
+            //Back Supports
+            { x:  -4,  y: -7,  z: 3}, //Left Foot Back - 32
+            { x:  4,  y: -7,  z: 3}, //Right Foot Back - 33
+        
+        ],
+
+        edges: [
+            //Top Board
+            [0, 1],
+            [0, 2],
+            [1, 3],
+            [2, 3],
+            //Middle Board
+            [4, 5],
+            [4, 6],
+            [5, 7],
+            [6, 7],
+            //Bottom Board
+            [8, 9],
+            [8, 10],
+            [9, 11],
+            [10, 11],
+            /*Middle thing
+            [12, 13],
+            [12, 14],
+            [13, 15],
+            [14, 15],*/
+            //Base
+            [13, 16],
+            [15, 18],
+
+            //Top Board
+            [20, 21],
+            [20, 22],
+            [21, 23],
+            [22, 23],
+            //Middle Board
+            [24, 25],
+            [24, 26],
+            [25, 27],
+            [26, 27],
+            //Bottom Board
+            [28, 29],
+            [28, 30],
+            [29, 31],
+            [30, 31],
+
+            //Top Board
+            [0, 20],
+            [1, 21],
+            [2, 22],
+            [3, 23],
+            //Middle Board
+            [4, 24],
+            [5, 25],
+            [6, 26],
+            [7, 27],
+            //Bottom Board
+            [8, 28],
+            [9, 29],
+            [10, 30],
+            [11, 31],
+            //Bottom Feet Back Supports
+            [16, 32],
+            [18, 33],
+            [32, 12],
+            [33, 14],
+
+        ]
+
+    }
+}
