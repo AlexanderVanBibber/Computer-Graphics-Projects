@@ -134,7 +134,7 @@ function game_loop(timestamp) {
     }
     else {
       if(!hasCrashed) {
-        camera.z += .1;
+        camera.z += .5;
       }
       draw(player_model, playerXOffset, -14, camera.z + 20, 0.4, "red", -80, 0);
     }
@@ -155,8 +155,17 @@ function game_loop(timestamp) {
 
       if(checkCollision(hazardInstance)) {
 
+        console.log("X Distance:", hazardInstance.x - playerXOffset);
+        console.log("Z Distance:", hazardInstance.z - camera.z);
+        console.log("Hazard Z: ", hazardInstance.z);
+        console.log("Camera Z: ", camera.z);
+
         hasCrashed = true;
+
+      
       }
+
+      if(hasCrashed){break;};
 
     }
 
@@ -201,19 +210,12 @@ function spawnHazard() {
 function checkCollision(hazardInstance) {
 
   const xDistance = Math.abs(hazardInstance.x - playerXOffset);
-  const zDistance = Math.abs(hazardInstance.z - camera.z + 20);
+  const zDistance = hazardInstance.z - camera.z;
 
-  if(hasCrashed) {
-
-    console.log("xDistance: ", xDistance);
-    console.log("zDistance: ", zDistance);
-
-  }
-
-
-  if(xDistance < 20 && zDistance < 35) {
+  if(xDistance < 11 && zDistance > 7.5 && zDistance < 15) {
 
     return true;
+
   }
 
   return false;
