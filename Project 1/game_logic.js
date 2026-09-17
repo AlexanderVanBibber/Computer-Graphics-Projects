@@ -21,6 +21,8 @@ function resizeCanvas() {
 
 }
 
+let pixelGridOn = true;
+
 function draw(asset, xPos, yPos, zPos, scale, color, yOffset, xOffset){
 
     let projectedVertices = [];
@@ -62,8 +64,14 @@ function draw(asset, xPos, yPos, zPos, scale, color, yOffset, xOffset){
 
       //console.log("Drawing edge")
       //console.log(u1, v1, u2, v2);
+      if(pixelGridOn) {
 
-      drawLine(u1, v1, u2, v2, color);
+        drawLineCustom(u1, v1, u2, v2, color);
+
+      } else {
+
+        drawLine(u1, v1, u2, v2, color);
+      }
     }
 }
 
@@ -78,6 +86,72 @@ function drawLine(x1, y1, x2, y2, color){
     ctx.lineTo(x2, y2);
     ctx.stroke();
   }
+
+let xStart, xEnd, yStart, yEnd, slope, roundX1, roundX2, roundY1, roundY2 = 0;
+
+function drawLineCustom(x1, y1, x2, y2, color) {
+
+  roundX1 = Math.round(x1) + 100;
+  roundX2 = Math.round(x2) + 100;
+  roundY1 = Math.round(y1) + 100;
+  roundY2 = Math.round(y2) + 100;
+
+  /*console.log("x1: ", roundX1);
+  console.log("x2: ", roundX2);
+  console.log("y1: ", roundY1);
+  console.log("y2: ", roundY2);*/
+  //Find bounding box
+  if(x1 > x2) {
+    xStart = roundX2;
+    xEnd = roundX1;
+  }
+  else {
+    xStart = roundX1;
+    xEnd = roundX2;
+  }
+
+  if(y1 > y2) {
+    yStart = roundY2;
+    yEnd = roundY1;
+  }
+  else {
+    yStart = roundY1;
+    yEnd = roundY2;
+  }
+
+  slope = (yEnd - yStart) / (xEnd - xStart);
+
+  //console.log("slope: ", slope);
+
+  for(let j = yStart; j<yEnd; j++) {
+  
+    for(let i = xStart; i<xEnd; i++) {
+
+      console.log("i: ", i);
+      console.log("j: ", j);
+
+      if(i > 0 && j > 0 && i < 200 && j < 200) {
+
+        setPixelColor(i, j, "blue");
+
+      }
+
+
+      
+        /*if(Math.round(i * slope) == j && i < cols && j < rows) {
+
+          console.log("Drawing Pixel at: ", i, j);
+
+          setPixelColor(i, j, "red");
+        }*/
+
+
+     }
+  }
+
+
+
+}
 
 const cubes = [{z: -10, color: "white"}, {z: -8, color: "white"}, {z: -6, color: "white"}, {z: -4, color: "white"}, {z: -2, color: "white"}, {z: 0, color: "white"}, {z: 2, color: "white"}, {z: 4, color: "white"}, {z: 6, color: "white"}, {z: 8, color: "white"}];
 
@@ -194,6 +268,42 @@ function game_loop(timestamp) {
     
 }
 
+const rows = 200;
+const cols = 200;
+const pixelGrid = Array.from({ length: cols }, () => Array(rows).fill("#050510"));
+
+let seePixelOutline = true;
+
+function drawPixelGrid() {
+
+  
+
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = "#444444";
+
+
+    for(let v=0; v< rows; v++){
+      for(let u=0; u<cols; u++){
+
+        ctx.fillStyle = pixelGrid[u][v];
+        ctx.fillRect(u*5, v*5, 5, 5);
+
+        if( seePixelOutline ){
+          ctx.strokeRect(u*5, v*5, 5, 5);
+        }
+
+      }
+    }
+
+
+  }
+
+function setPixelColor(u,v,color){
+
+  pixelGrid[u][v] = color;
+
+}
+
 let lastTime = 0;
 
 const hazards = [];
@@ -212,7 +322,7 @@ function checkCollision(hazardInstance) {
   const xDistance = Math.abs(hazardInstance.x - playerXOffset);
   const zDistance = hazardInstance.z - camera.z;
 
-  if(xDistance < 11 && zDistance > 7.5 && zDistance < 15) {
+  if(xDistance < 11 && zDistance > 8.5 && zDistance < 15) {
 
     return true;
 
@@ -248,4 +358,9 @@ document.addEventListener("keyup", (event) => {
     }
 });
 
-requestAnimationFrame(game_loop);
+//setPixelColor(0, 0, "#FFFFFF");
+//drawLineCustom(0, 0, 5, 5, "red");
+draw(environment_box, 0, 0, 0, 1, "orange", 200, -300);
+
+drawPixelGrid();
+//requestAnimationFrame(game_loop);
