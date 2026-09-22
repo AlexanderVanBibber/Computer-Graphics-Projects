@@ -6,7 +6,7 @@ const hazard = road_hazard.road_cone;
 const environment_box = environment.environment_box;
 const player_model = player.player_car;
 
-let camera = {x: 0, y: 0, z: -10};
+let camera = {x: 0, y: 0, z: 0};
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -23,6 +23,8 @@ function resizeCanvas() {
 }
 
 let pixelGridOn = false;
+let triangles = false;
+let killGameLoop = false;
 
 function draw(asset, xPos, yPos, zPos, scale, color, xOffset, yOffset){
 
@@ -43,8 +45,8 @@ function draw(asset, xPos, yPos, zPos, scale, color, xOffset, yOffset){
        //console.log("scale and center"); 
        if(!pixelGridOn) {
 
-        canvasPos.u = (canvasPos.u * canvas.width + canvas.width/2) + xOffset;
-        canvasPos.v = (canvasPos.v * canvas.height + canvas.height/2) + yOffset;
+        canvasPos.u = ((canvasPos.u * size) + (size / 2)) + xOffset;
+        canvasPos.v = ((canvasPos.v * size) + (size / 2)) + yOffset;
 
        } else {
 
@@ -77,14 +79,14 @@ function draw(asset, xPos, yPos, zPos, scale, color, xOffset, yOffset){
 
       if(!pixelGridOn) {
 
-        console.log(u1, v1, u2, v2);
+        //console.log(u1, v1, u2, v2);
 
 
         drawLine(u1, v1, u2, v2, color);
 
       } else {
 
-        console.log(u1, v1, u2, v2);
+        //console.log(u1, v1, u2, v2);
 
         drawLineCustom(u1, v1, u2, v2, color);
       }
@@ -92,7 +94,8 @@ function draw(asset, xPos, yPos, zPos, scale, color, xOffset, yOffset){
     }
 }
 
-function drawCustom(asset, zPos, scale, xOffset, yOffset) {
+
+function drawCustom(asset, xPos, yPos, zPos, scale, xOffset, yOffset, layer) {
 
   let projectedVertices = [];
 
@@ -100,14 +103,30 @@ function drawCustom(asset, zPos, scale, xOffset, yOffset) {
 
     let canvasPos = {};
 
-    canvasPos.u = ((asset.vertices[v].x - camera.x) / (asset.vertices[v].z - camera.z + zPos)) * scale;
-    canvasPos.v = ((asset.vertices[v].y - camera.y) / (asset.vertices[v].z - camera.z + zPos)) * scale;
+    let depth = asset.vertices[v].z - camera.z + zPos;
+
+    canvasPos.z = depth;
+
+    //console.log("Depth: ", depth);
+
+    //console.log("Starting Projection Calculation for Coords: ", asset.vertices[v].x, asset.vertices[v].y, asset.vertices[v].z);
+    //console.log("Camera is at: ", camera.x, camera.y, camera.z);
+    //console.log("Translating X and Y coords: ", asset.vertices[v].x - camera.x, asset.vertices[v].y - camera.y);
+
+    canvasPos.u = ((asset.vertices[v].x - camera.x + xPos) / depth) * scale;
+    canvasPos.v = ((asset.vertices[v].y - camera.y + yPos) / depth) * scale;
+
+    //console.log("Dividing by depth: ", canvasPos.u, canvasPos.v);
+    //console.log("Center and Scale X: ", canvasPos.u * size, (canvasPos.u * size) + size / 2);
+    //console.log("Center and Scale Y: ", canvasPos.v * size, (canvasPos.v * size) + size / 2);
 
     //console.log("CAnvas Pos: ", canvasPos);
-    canvasPos.u = Math.round(((canvasPos.u + 1) / 2) * 200) + xOffset;
-    canvasPos.v = Math.round(((canvasPos.v + 1) / 2) * 200) + yOffset;
+    canvasPos.u = Math.round(((canvasPos.u + 1) / 2) * 199) + xOffset;
+    canvasPos.v = Math.round(((1 - canvasPos.v) / 2) * 199) + yOffset;
 
-    console.log("Canvas Pos: ", canvasPos);
+    //console.log("Size: ", size);
+
+    //console.log("Canvas Pos: ", canvasPos.u, canvasPos.v);
 
     //setPixelColor(Math.round(canvasPos.u), Math.round(canvasPos.v), "red");
 
@@ -117,23 +136,151 @@ function drawCustom(asset, zPos, scale, xOffset, yOffset) {
 
   //console.log(projectedVertices);
 
-  for(let e = 0; e < asset.edges.length; e++){
-    
-    //first vertex
-    let e1 = asset.edges[e][0]; //idx
-    let u1 = projectedVertices[ e1 ].u; 
-    let v1 = 200 - projectedVertices[ e1 ].v;
+  for (let e = 0; e < asset.triangles.length; e++) {
 
-    //second vertex
-    let e2 = asset.edges[e][1]; //idx
-    let u2 = projectedVertices[ e2 ].u;
-    let v2 = 200 - projectedVertices[ e2 ].v;
+    let color = asset.triangles[e][3];
 
-    drawLineCustom(u1, v1, u2, v2, "blue");
-  }
+    const A = asset.triangles[e][0];
+    const B = asset.triangles[e][1];
+    const C = asset.triangles[e][2];
+
+    const u1 = projectedVertices[A].u;
+    const v1 = projectedVertices[A].v;
+    const z1 = projectedVertices[A].z;
+
+    const u2 = projectedVertices[B].u;
+    const v2 = projectedVertices[B].v;
+    const z2 = projectedVertices[B].z;
+
+    const u3 = projectedVertices[C].u;
+    const v3 = projectedVertices[C].v;
+    const z3 = projectedVertices[C].z;
+
+
+    // Triangle area
+    const ABC = edgeFunction(
+        u1, v1,
+        u2, v2,
+        u3, v3
+    );
+
+    if (ABC === 0) {
+        continue;
+    }
+
+
+    // Bounding box
+    const minX = Math.max(
+        0,
+        Math.floor(Math.min(u1, u2, u3))
+    );
+
+    const maxX = Math.min(
+        199,
+        Math.ceil(Math.max(u1, u2, u3))
+    );
+
+    const minY = Math.max(
+        0,
+        Math.floor(Math.min(v1, v2, v3))
+    );
+
+    const maxY = Math.min(
+        199,
+        Math.ceil(Math.max(v1, v2, v3))
+    );
+
+    console.log("ABC: ", ABC);
+    console.log(minX, maxX, minY, maxY);
+
+
+    // Rasterize
+    for (let y = minY; y <= maxY; y++) {
+
+        for (let x = minX; x <= maxX; x++) {
+
+            // Pixel center
+            const px = x + 0.5;
+            const py = y + 0.5;
+
+
+            const ABP = edgeFunction(
+                u1, v1,
+                u2, v2,
+                px, py
+            );
+
+            const BCP = edgeFunction(
+                u2, v2,
+                u3, v3,
+                px, py
+            );
+
+            const CAP = edgeFunction(
+                u3, v3,
+                u1, v1,
+                px, py
+            );
+
+
+            // Handle either triangle winding
+            let inside;
+
+            if (ABC > 0) {
+                inside =
+                    ABP >= 0 &&
+                    BCP >= 0 &&
+                    CAP >= 0;
+            } else {
+                inside =
+                    ABP <= 0 &&
+                    BCP <= 0 &&
+                    CAP <= 0;
+            }
+
+
+            if (!inside) {
+                continue;
+            }
+
+
+            // Barycentric coordinates
+            const weightA = BCP / ABC;
+            const weightB = CAP / ABC;
+            const weightC = ABP / ABC;
+
+
+            // Interpolate depth
+            const depth =
+                weightA * z1 +
+                weightB * z2 +
+                weightC * z3;
+
+            //console.log("Depth: ", depth, pixelGridDepth[x][y]);
+            // Z-buffer
+            if (layer > pixelGridLayer[x][y] || layer === pixelGridLayer[x][y] && depth < pixelGridDepth[x][y]) {
+
+                pixelGridDepth[x][y] = depth;
+                pixelGridLayer[x][y] = layer;
+
+                //console.log("Drawing triangle");
+
+                setPixelColor(x, y, color);
+            }
+        }
+    }
+}
 
 }
 
+function edgeFunction(x1, y1, x2, y2, x3, y3) {
+
+  const result = ((x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1));
+
+  //console.log("Result: ", result);
+
+  return result;
+}
 
 function drawLine(x1, y1, x2, y2, color){
     ctx.lineWidth = 2;
@@ -144,15 +291,10 @@ function drawLine(x1, y1, x2, y2, color){
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
-  }
+}
 
 
 function drawLineCustom(x1, y1, x2, y2, color) {
-
-  /*let roundX1 = Math.round(x1);
-  let roundX2 = Math.round(x2);
-  let roundY1 = Math.round(y1);
-  let roundY2 = Math.round(y2);*/
 
   const dx = Math.round(x2 - x1);
   const dy = Math.round(y2 - y1);
@@ -190,9 +332,14 @@ function game_loop(timestamp) {
 
       draw(player_model, playerXOffset, -14, camera.z + 15, 0.4, "red", 0, -100);
 
+    } else if (triangles) {
+
+      drawCustom(player_model, playerXOffset, -14, camera.z + 15, 0.8, 0, 30, 2);
+
     } else {
 
       draw(player_model, playerXOffset, -14, camera.z + 15, 0.8, "red", 0, size - 230);
+
     }
 
     drawEnvironment();  
@@ -230,6 +377,8 @@ function game_loop(timestamp) {
 
       if(hazardInstance.z < camera.z) {
 
+        console.log(hazards);
+
         hazards.shift();
 
       }
@@ -239,6 +388,10 @@ function game_loop(timestamp) {
         if(!pixelGridOn) {
 
           draw(hazard, hazardInstance.x, -14, hazardInstance.z, .2, "orange", 0, 0);
+
+        } else if (triangles) {
+
+          drawCustom(hazard, hazardInstance.x, -14, hazardInstance.z, 0.4, 0, 0, 1);
 
         } else {
 
@@ -271,24 +424,27 @@ function game_loop(timestamp) {
     
 }
 
-const cubes = [ {z: -10, color: "white"}, 
-                {z: -8, color: "white"}, 
-                {z: -6, color: "white"}, 
-                {z: -4, color: "white"}, 
-                {z: -2, color: "white"}, 
+
+const cubes = [ 
                 {z: 0, color: "white"}, 
                 {z: 2, color: "white"}, 
                 {z: 4, color: "white"}, 
                 {z: 6, color: "white"}, 
-                {z: 8, color: "white"} ];
+                {z: 8, color: "white"},
+                {z: 10, color: "white"}, 
+                {z: 12, color: "white"}, 
+                {z: 14, color: "white"},
+                {z: 16, color: "white"},
+                {z: 18, color: "white"},
+                {z: 20, color: "white"}, ];
 
 function drawEnvironment() {
 
-  if(camera.z >= 0) {
+  if(camera.z >= 100) {
 
-      camera.z = -100;
+      camera.z = 1;
 
-      for(let cube of cubes) {
+      for(let cube of cubes) {  
 
         cube.z -= 100;
       }
@@ -310,15 +466,19 @@ function drawEnvironment() {
 
     for(let cube of cubes) {
 
-      if (cube.z >= camera.z) {
+      if (cube.z > camera.z) {
 
-        if(pixelGridOn) {
+        if(!pixelGridOn) {
 
-          draw(environment_box, 0, 0, cube.z, 1, cube.color, 0, size - 200);
+          draw(environment_box, 0, 0, cube.z, 1, cube.color, 0, 0);
+
+        } else if (triangles) {
+
+          drawCustom(environment_box, 0, 0, cube.z, 1, 0, 0, 0);
 
         } else {
 
-          draw(environment_box, 0, 0, cube.z, 1, cube.color, 0, 0);
+          draw(environment_box, 0, 0, cube.z, 1, cube.color, 0, size - 200);
 
         }
 
@@ -331,15 +491,14 @@ function drawEnvironment() {
 
       }
     }
-
-    //drawCustom(environment_box, -6, 2, -33, 30);
-
-    //drawPixelGrid();
 }
 
 const rows = 200;
 const cols = 200;
 const pixelGrid = Array.from({ length: cols }, () => Array(rows).fill("#050510"));
+const pixelGridDepth = Array.from({ length: cols }, () => Array(rows).fill(999));
+const pixelGridLayer = Array.from({ length: cols },() => Array(rows).fill(0));
+
 
 let seePixelOutline = false;
 
@@ -381,6 +540,8 @@ function clearPixelGrid() {
   for(let i = 0; i < cols; i++) {
 
     pixelGrid[i].fill("#050510");
+    pixelGridDepth[i].fill(999);
+    pixelGridLayer[i].fill(0);
   }
 }
 
@@ -411,6 +572,21 @@ function checkCollision(hazardInstance) {
   return false;
 }
 
+function game_loop_test(timestamp) {
+
+  pixelGridOn = true;
+
+  clearPixelGrid();
+
+  drawEnvironment();
+
+  drawPixelGrid();
+
+  console.log(camera.z);
+
+  requestAnimationFrame(game_loop_test);
+}
+
 let moveRight = false;
 let moveLeft = false;
 
@@ -418,21 +594,30 @@ document.addEventListener("keydown", (event) => {
 
     if (event.key === "ArrowLeft") {
         moveLeft = true;
+        //camera.x -= 0.01;
     }
 
     if (event.key === "ArrowRight") {
         moveRight = true;
+        //camera.x += 0.01
     }
 
-    if(event.key === "ArrowUp") {
-      camera.z += 0.01;
+    if(event.key === "k") {
+      killGameLoop = true;
     }
 
     if(event.key === "Enter") {
 
-      if(pixelGridOn) {
+      if(triangles) {
 
-        pixelGridOn = false;
+          triangles = false;
+
+          pixelGridOn = false;
+      
+      } else if(pixelGridOn) {
+
+        triangles = true;
+
       } else {
 
         pixelGridOn = true;
@@ -458,6 +643,16 @@ resizeCanvas();
 //setPixelColor(0, 0, "red");
 //draw(player_model, 0, -14, camera.z + 20, 0.4, "red", 0, 500);
 //draw(hazard, 0, -14, 0, 1, "orange", 0, size - 150);
+//draw(player_model, -20, -14, 20, 1, "red", 500, 200);
+//drawCustom(hazard, 5, 1, 0, 0);
+if(!killGameLoop) {
 
+  requestAnimationFrame(game_loop);
+
+}
+//requestAnimationFrame(game_loop_test);
+//clearPixelGrid();
+//drawCustom(player_model, -20, -14, 10, 0.8, 50, 0, 0);
+//draw(player_model, 20, -20, 20, 1, "red", -50, size - 130);
 //drawPixelGrid();
-requestAnimationFrame(game_loop);
+

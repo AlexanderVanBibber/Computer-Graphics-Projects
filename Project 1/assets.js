@@ -101,12 +101,12 @@ export const player = {
             { x:  -6,  y: -2,  z: 10}, //Bottom Left - 2
             { x:  6,  y: -2,  z: 10}, //Bottom Right - 3
             //Upper Bumper Outer
-            { x:  -6,  y: 0.5,  z: 10}, //Top Left- 4
-            { x:  6,  y: 0.5,  z: 10}, //Top Right - 5
-            { x:  -6.5,  y: -2.5,  z: 10}, //Bottom Left - 6
-            { x:  6.5,  y: -2.5,  z: 10}, //Bottom Right - 7
+            { x:  -6,  y: 0.5,  z: 10.01}, //Top Left- 4
+            { x:  6,  y: 0.5,  z: 10.01}, //Top Right - 5
+            { x:  -6.5,  y: -2.5,  z: 10.01}, //Bottom Left - 6
+            { x:  6.5,  y: -2.5,  z: 10.01}, //Bottom Right - 7
             //Spoiler
-            { x:  -4.5,  y: 2.5,  z: 10}, //Back Top Left - 8
+            { x:  -4.5,  y: 2.5,  z: 10}, //Back Top Left - 8     
             { x:  4.5,  y: 2.5,  z: 10}, //Back Top Right - 9
             { x:  -6.5,  y: 0.5,  z: 11}, //Front Bottom Left - 10
             { x:  6.5,  y: 0.5,  z: 11}, //Front Bottom Right - 11
@@ -117,11 +117,11 @@ export const player = {
             { x:  2,  y: 0.5,  z: 11.1}, //Bottom Right - 15
             { x:  -4.5,  y: 1.7,  z: 11.5}, //Middle Left - 16
             { x:  4.5,  y: 1.7,  z: 11.5}, //Middle Right - 17
-            { x:  -4,  y: 2.5,  z: 13}, //Top Left - 18
-            { x:   4,  y: 2.5,  z: 13}, //Top Right - 19
+            { x:  -4,  y: 3,  z: 13}, //Top Left - 18
+            { x:   4,  y: 3,  z: 13}, //Top Right - 19
             //Top
-            { x:  -4,  y: 2.5,  z: 18}, //Front Left - 20
-            { x:  4,  y: 2.5,  z: 18}, //Front Right - 21
+            { x:  -4,  y: 3,  z: 17}, //Front Left - 20
+            { x:  4,  y: 3,  z: 17}, //Front Right - 21
             //Left Side Window
             { x:  -5.5,  y: 1.7,  z: 18}, //Front Bottom - 22
             { x:  -5.75,  y: 1.7,  z: 12}, //Rear Bottom - 23
@@ -129,7 +129,7 @@ export const player = {
             { x:  -8,  y: 1.5,  z: 16.5}, //Top Left - 24
             { x:  -6,  y: 1.5,  z: 16.5}, //Top Right - 25
             { x:  -8,  y: 0.5,  z: 16.5}, //Bottom Left - 26
-            { x:  -6,  y: 0.5,  z: 16.5}, //Bottom Right - 27
+            { x:  -6,  y: 0.5,  z: 16.5}, //Bottom Right - 27 */
             //Left Front
             { x:  -6.75,  y: 1,  z: 22}, //Left - 28
             { x:  -6.75,  y: 1.5,  z: 18}, //Rear Left - 29
@@ -239,11 +239,11 @@ export const player = {
             //Right Window
             [21, 32], //Front Right of Top -> Front Bottom of Right Window
             [32, 33], //Front Bottom of Right Window -> Rear Bottom of Right Window
-            /*Left Mirror
-            [24, 25], //Top Left -> Top Right
-            [24, 26], //Top Left -> Bottom Left
-            [25, 27], //Top Right -> Bottom Right
-            [26, 27], //Bottom Left -> Bottom Right*/
+                        /*Left Mirror
+                        [24, 25], //Top Left -> Top Right
+                        [24, 26], //Top Left -> Bottom Left
+                        [25, 27], //Top Right -> Bottom Right
+                        [26, 27], //Bottom Left -> Bottom Right*/
             //Front
             [28, 29], //Front Left -> Rear left of hood
             [29, 22], //Rear left of hood -> Front Bottom of Left Window
@@ -319,8 +319,200 @@ export const player = {
             [74, 75],
             [76, 77],
 
+            //Extra lines for triangles
+            [52, 4],
+            [53, 10],
+            [6, 34],
+            [54, 56],
+            [57, 29],
+            [58, 50],
+            [16, 4],
+            [23, 10],
+            [14, 4],
 
-        ]
+            [61, 5],
+            [62, 11],
+            [7, 35],
+            [63, 65],
+            [66, 31],
+            [67, 48],
+            [17, 5],
+            [33, 11],
+            [15, 5],
+
+
+
+        ],
+
+        triangles: [
+
+    // =========================================================
+    // UPPER BUMPER
+    // =========================================================
+
+    [0, 1, 3, "gray"],
+    [0, 3, 2, "gray"],
+
+    // Upper bumper outer
+    [4, 5, 7, "red"],
+    [4, 7, 6, "red"],
+
+    // =========================================================
+    // SPOILER
+    // =========================================================
+
+    // Left spoiler side
+    [4, 8, 12, "darkred"],
+    [4, 12, 10, "darkred"],
+
+    // Right spoiler side
+    [5, 11, 13, "darkred"],
+    [5, 13, 9, "darkred"],
+
+    // Spoiler top
+    [8, 9, 13, "darkred"],
+    [8, 13, 12, "darkred"],
+
+
+    // =========================================================
+    // REAR WINDOW
+    // =========================================================
+
+    // Lower rear window
+    [14, 15, 17, "gray"],
+    [14, 17, 16, "gray"],
+
+    // Upper rear window
+    [16, 17, 19, "gray"],
+    [16, 19, 18, "gray"],
+
+    // =========================================================
+    // ROOF
+    // =========================================================
+
+    [18, 19, 21, "red"],
+    [18, 21, 20, "red"],
+
+    // =========================================================
+    // LEFT SIDE WINDOW
+    // =========================================================
+
+    [20, 22, 23, "gray"],
+    [20, 23, 16, "gray"],
+    [20, 16, 18, "gray"],
+
+    // =========================================================
+    // RIGHT SIDE WINDOW
+    // =========================================================
+
+    [21, 32, 33, "gray"],
+    [21, 33, 17, "gray"],
+    [21, 17, 19, "gray"],
+
+    // =========================================================
+    // LEFT HOOD / FRONT UPPER BODY
+    // =========================================================
+
+    [28, 29, 22, "red"],
+    [28, 22, 20, "red"],
+
+    // Left hood section
+    [29, 22, 16, "red"],
+    [29, 16, 4, "red"],
+
+    // Right hood section
+    [31, 32, 17, "red"],
+    [31, 17, 5, "red"],
+
+    // =========================================================
+    // FRONT FACE
+    // =========================================================
+
+    [28, 30, 31, "red"],
+    [28, 31, 29, "red"],
+
+    // =========================================================
+    // LOWER BUMPER
+    // =========================================================
+
+    // Main lower bumper
+    [34, 35, 37, "red"],
+    [34, 37, 36, "red"],
+
+    // Left lower bumper
+    [34, 36, 39, "red"],
+    [34, 39, 38, "red"],
+
+    // Right lower bumper
+    [35, 46, 47, "#c62828"],
+    [35, 47, 37, "#c62828"],
+
+    // =========================================================
+    // SIDE CONNECTIONS AROUND WINDOWS
+    // =========================================================
+
+    [14, 15, 5, "red"],
+    [14, 5, 4, "red"],
+
+    [23, 16, 4, "red"],
+    [23, 4, 10, "red"],
+
+    [33, 17, 5, "red"],
+    [33, 5, 11, "red"],
+
+// =========================================================
+// LEFT SIDE — very simplified
+// =========================================================
+
+[4, 16, 14, "red"],
+[4, 23, 16, "darkred"],
+
+[4, 10, 23, "darkred"],
+[10, 29, 23, "red"],
+
+[10, 29, 28, "red"],
+[10, 28, 50, "darkred"],
+
+[10, 50, 6, "darkred"],
+[6, 50, 34, "darkred"],
+
+[50, 34, 36, "darkred"],
+[50, 36, 51, "darkred"],
+
+[50, 51, 73, "red"],
+[50, 73, 28, "red"],
+
+
+// =========================================================
+// RIGHT SIDE — very simplified
+// =========================================================
+
+[5, 15, 17, "red"],
+[5, 17, 33, "darkred"],
+
+[5, 33, 11, "darkred"],
+[11, 33, 31, "red"],
+
+[11, 31, 30, "red"],
+[11, 30, 48, "darkred"],
+
+[11, 48, 7, "darkred"],
+[7, 48, 35, "darkred"],
+
+[48, 35, 37, "darkred"],
+[48, 37, 49, "darkred"],
+
+[48, 49, 77, "darkred"],
+[48, 77, 30, "darkred"],
+
+[11, 5, 7, "red"], // Right side
+[10, 4, 6, "red"], // Left side
+
+[6, 7, 34, "darkred"],
+[34, 35, 7, "darkred"],
+
+],
+
     }
 }
 
@@ -329,8 +521,8 @@ export const environment = {
     environment_box: {
         vertices: [
             //Foreground
-            { x:  -1,  y: -1,  z: 1}, //Bottom left
-            { x:  -1,  y: 1,  z: 1}, //Top left
+            { x:  -1,  y: -1,  z: 1}, //Top left
+            { x:  -1,  y: 1,  z: 1}, //Bottom left
             { x:  1,  y: -1,  z: 1}, //Bottom right
             { x:  1,  y: 1,  z: 1}, //Top right
             //Background
@@ -363,6 +555,17 @@ export const environment = {
             [3, 7],
             [8, 9],
             [10, 11],
+        ],
+
+        triangles: [
+
+            // Left
+            [0, 4, 1, "gray"],
+            [1, 4, 5, "gray"],
+
+            // Right
+            [2, 3, 6, "gray"],
+            [3, 6, 7, "gray"],
         ]
     }
 }
@@ -434,11 +637,6 @@ export const road_hazard = {
             [8, 10],
             [9, 11],
             [10, 11],
-            /*Middle thing
-            [12, 13],
-            [12, 14],
-            [13, 15],
-            [14, 15],*/
             //Base
             [13, 16],
             [15, 18],
@@ -480,6 +678,91 @@ export const road_hazard = {
             [32, 12],
             [33, 14],
 
+        ],
+
+        triangles: [
+
+            // FRONT TOP BOARD
+            [0, 1, 2, "orange"],
+            [1, 3, 2, "orange"],
+
+            // FRONT MIDDLE BOARD
+            [4, 5, 6, "orange"],
+            [5, 7, 6, "orange"],
+
+            // FRONT BOTTOM BOARD
+            [8, 9, 10, "orange"],
+            [9, 11, 10, "orange"],
+
+
+            // BACK TOP BOARD
+            [20, 22, 21, "orange"],
+            [21, 22, 23, "orange"],
+
+            // BACK MIDDLE BOARD
+            [24, 26, 25, "orange"],
+            [25, 26, 27, "orange"],
+
+            // BACK BOTTOM BOARD
+            [28, 30, 29, "orange"],
+            [29, 30, 31, "orange"],
+
+
+            // TOP BOARD - LEFT SIDE
+            [0, 20, 1, "orange"],
+            [1, 20, 21, "orange"],
+
+            // TOP BOARD - RIGHT SIDE
+            [2, 3, 22, "orange"],
+            [3, 23, 22, "orange"],
+
+            // TOP BOARD - TOP
+            [0, 2, 20, "orange"],
+            [2, 22, 20, "orange"],
+
+            // TOP BOARD - BOTTOM
+            [1, 21, 3, "orange"],
+            [3, 21, 23, "orange"],
+
+
+            // MIDDLE BOARD - LEFT SIDE
+            [4, 24, 5, "orange"],
+            [5, 24, 25, "orange"],
+
+            // MIDDLE BOARD - RIGHT SIDE
+            [6, 7, 26, "orange"],
+            [7, 27, 26, "orange"],
+
+            // MIDDLE BOARD - TOP
+            [4, 6, 24, "orange"],
+            [6, 26, 24, "orange"],
+
+            // MIDDLE BOARD - BOTTOM
+            [5, 25, 7, "orange"],
+            [7, 25, 27, "orange"],
+
+
+            // BOTTOM BOARD - LEFT SIDE
+            [8, 28, 9, "orange"],
+            [9, 28, 29, "orange"],
+
+            // BOTTOM BOARD - RIGHT SIDE
+            [10, 11, 30, "orange"],
+            [11, 31, 30, "orange"],
+
+            // BOTTOM BOARD - TOP
+            [8, 10, 28, "orange"],
+            [10, 30, 28, "orange"],
+
+            // BOTTOM BOARD - BOTTOM
+            [9, 29, 11, "orange"],
+            [11, 29, 31, "orange"],
+
+            [13, 16, 32, "orange"],
+            [15, 18, 33, "orange"],
+
+            [13, 32, 12, "orange"],
+            [15, 33, 14, "orange"],
         ]
 
     }
