@@ -633,6 +633,11 @@ export const environment = {
             { x:  .33,  y: -1,  z: 1.5}, //10
             { x:  .33,  y: -1,  z: 2.5}, //11
 
+            { x:  -.38,  y: -1,  z: 1.5}, //12
+            { x:  -.38,  y: -1,  z: 2.5}, //13
+            { x:  .38,  y: -1,  z: 1.5}, //14
+            { x:  .38,  y: -1,  z: 2.5}, //15
+
         ],
 
         edges: [
@@ -664,6 +669,13 @@ export const environment = {
             // Right
             [2, 3, 6, "gray"],
             [3, 6, 7, "gray"],
+
+            //Lines on road
+            [8, 9, 12, "white"],
+            [9, 12, 13, "white"],
+
+            [10, 11, 14, "white"],
+            [11, 14, 15, "white"],
 
         ]
     }
