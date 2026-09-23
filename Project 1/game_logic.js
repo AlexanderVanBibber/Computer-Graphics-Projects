@@ -1,10 +1,12 @@
 import { environment } from "./assets.js"
 import {player } from "./assets.js"
 import { road_hazard } from "./assets.js"
+import { road_lines } from "./assets.js"
 
 const hazard = road_hazard.road_cone;
 const environment_box = environment.environment_box;
 const player_model = player.player_car;
+const road_line = road_lines.line;
 
 let camera = {x: 0, y: 0, z: 0};
 
@@ -334,7 +336,7 @@ function game_loop(timestamp) {
 
     } else if (triangles) {
 
-      drawCustom(player_model, playerXOffset, -14, camera.z + 15, 0.8, 0, 30, 2);
+      drawCustom(player_model, playerXOffset, -14, camera.z + 15, 0.8, 0, 30, 1);
 
     } else {
 
@@ -461,6 +463,12 @@ function drawEnvironment() {
         camera.z += .5;
 
       }
+
+    }
+
+    if(triangles) {
+
+      drawCustom(environment_box, 0, 0, camera.z, 1, 0, 0, 0);
 
     }
 

@@ -91,6 +91,31 @@
     },
 }*/
 
+const colors = {
+    body:       "#B5121B", // Main glossy red
+    bodyLight:  "#D62832", // Surfaces facing more toward light
+    bodyDark:   "#7A0C12", // Recesses / downward-facing surfaces
+    bodyDeep:   "#4A070A", // Very dark red accents
+
+    window:     "#263238", // Dark blue-gray glass
+    windowLight:"#455A64", // Slightly lighter glass
+    trim:       "#181A1B", // Black/dark trim
+    bumper:     "#5A0A0E"  // Dark bumper/recess color
+};
+
+const hazardColors = {
+    signFront:       "#E87516", // Bright reflective orange
+    signFrontLight:  "#F58A1F", // Highlighted orange
+    signSide:        "#B84E0A", // Darker orange edge
+    signSideLight:   "#D76510", // Medium orange edge
+    signBottom:      "#873607", // Dark underside
+    signBack:        "#9E4309", // Muted orange back
+
+    support:         "#343434", // Dark metal support
+    supportLight:    "#505050", // Lit support surface
+    supportDark:     "#202020"  // Shadowed support
+};
+
 export const player = {
 
     player_car: {
@@ -266,7 +291,7 @@ export const player = {
             [35, 46],
             [37, 47],
             [46, 47],
-            //
+            //Front Hood Right
             [30, 48],
             [48, 77],
             [77, 49],
@@ -308,12 +333,12 @@ export const player = {
             [75, 69],
             //Lower Right Side
             [64, 69],
-            //Lower Left Side in front of wheel
+            //Lower Right Side in front of wheel
             [49, 68],
             //Left Edge
-            [70, 71],
-            [72, 73],
-            [50, 73],
+            [70, 71], //In between wheels second lowest line
+            [72, 73], //Front of wheels second lowest line
+            [50, 73], //
             [73, 51],
             //Right Edge
             [74, 75],
@@ -346,172 +371,244 @@ export const player = {
 
         triangles: [
 
-    // =========================================================
-    // UPPER BUMPER
-    // =========================================================
+            /*[0, 1, 3, "gray"], //Inner Upper Bumper
+            [0, 3, 2, "gray"], //Inner Upper Bumper
 
-    [0, 1, 3, "gray"],
-    [0, 3, 2, "gray"],
+            [4, 5, 7, "red"], //Outer Upper Bumper
+            [4, 7, 6, "red"], //Outer Upper Bumper
 
-    // Upper bumper outer
-    [4, 5, 7, "red"],
-    [4, 7, 6, "red"],
+            // Left spoiler side
+            [4, 8, 12, "red"],
+            [4, 12, 10, "red"],
 
-    // =========================================================
-    // SPOILER
-    // =========================================================
+            // Right spoiler side
+            [5, 11, 13, "red"],
+            [5, 13, 9, "red"],
 
-    // Left spoiler side
-    [4, 8, 12, "darkred"],
-    [4, 12, 10, "darkred"],
-
-    // Right spoiler side
-    [5, 11, 13, "darkred"],
-    [5, 13, 9, "darkred"],
-
-    // Spoiler top
-    [8, 9, 13, "darkred"],
-    [8, 13, 12, "darkred"],
+            // Spoiler top
+            [8, 9, 13, "red"],
+            [8, 13, 12, "red"],
 
 
-    // =========================================================
-    // REAR WINDOW
-    // =========================================================
+            // Lower rear window
+            [14, 15, 17, "gray"],
+            [14, 17, 16, "gray"],
 
-    // Lower rear window
-    [14, 15, 17, "gray"],
-    [14, 17, 16, "gray"],
+            // Upper rear window
+            [16, 17, 19, "gray"],
+            [16, 19, 18, "gray"],
 
-    // Upper rear window
-    [16, 17, 19, "gray"],
-    [16, 19, 18, "gray"],
+            //Roof
+            [18, 19, 21, "red"],
+            [18, 21, 20, "red"],
 
-    // =========================================================
-    // ROOF
-    // =========================================================
+            //Left Side Window
+            [20, 22, 23, "gray"],
+            [20, 23, 16, "gray"],
+            [20, 16, 18, "gray"],
 
-    [18, 19, 21, "red"],
-    [18, 21, 20, "red"],
+            //Right Side Window
+            [21, 32, 33, "gray"],
+            [21, 33, 17, "gray"],
+            [21, 17, 19, "gray"],
 
-    // =========================================================
-    // LEFT SIDE WINDOW
-    // =========================================================
+            //Front
+            [28, 30, 31, "darkred"],
+            [28, 31, 29, "darkred"],
 
-    [20, 22, 23, "gray"],
-    [20, 23, 16, "gray"],
-    [20, 16, 18, "gray"],
+            // Main lower bumper
+            [34, 35, 37, "red"],
+            [34, 37, 36, "red"],
 
-    // =========================================================
-    // RIGHT SIDE WINDOW
-    // =========================================================
-
-    [21, 32, 33, "gray"],
-    [21, 33, 17, "gray"],
-    [21, 17, 19, "gray"],
-
-    // =========================================================
-    // LEFT HOOD / FRONT UPPER BODY
-    // =========================================================
-
-    [28, 29, 22, "red"],
-    [28, 22, 20, "red"],
-
-    // Left hood section
-    [29, 22, 16, "red"],
-    [29, 16, 4, "red"],
-
-    // Right hood section
-    [31, 32, 17, "red"],
-    [31, 17, 5, "red"],
-
-    // =========================================================
-    // FRONT FACE
-    // =========================================================
-
-    [28, 30, 31, "red"],
-    [28, 31, 29, "red"],
-
-    // =========================================================
-    // LOWER BUMPER
-    // =========================================================
-
-    // Main lower bumper
-    [34, 35, 37, "red"],
-    [34, 37, 36, "red"],
-
-    // Left lower bumper
-    [34, 36, 39, "red"],
-    [34, 39, 38, "red"],
-
-    // Right lower bumper
-    [35, 46, 47, "#c62828"],
-    [35, 47, 37, "#c62828"],
-
-    // =========================================================
-    // SIDE CONNECTIONS AROUND WINDOWS
-    // =========================================================
-
-    [14, 15, 5, "red"],
-    [14, 5, 4, "red"],
-
-    [23, 16, 4, "red"],
-    [23, 4, 10, "red"],
-
-    [33, 17, 5, "red"],
-    [33, 5, 11, "red"],
-
-// =========================================================
-// LEFT SIDE — very simplified
-// =========================================================
-
-[4, 16, 14, "red"],
-[4, 23, 16, "darkred"],
-
-[4, 10, 23, "darkred"],
-[10, 29, 23, "red"],
-
-[10, 29, 28, "red"],
-[10, 28, 50, "darkred"],
-
-[10, 50, 6, "darkred"],
-[6, 50, 34, "darkred"],
-
-[50, 34, 36, "darkred"],
-[50, 36, 51, "darkred"],
-
-[50, 51, 73, "red"],
-[50, 73, 28, "red"],
+            //Side Connectors around rear window
+            [14, 15, 5, "darkred"],
+            [14, 5, 4, "darkred"],
 
 
-// =========================================================
-// RIGHT SIDE — very simplified
-// =========================================================
+            //Left Side
+            [34, 36, 39, "red"], //Forgot to label but it looks correct so who cares
+            [34, 38, 39, "red"],
+            [6, 34, 38, "red"],
+            [6, 38, 52, "red"],
+            [4, 6, 52, "red"],
+            [4, 10, 52, "red"],
+            [4, 14, 16, "darkred"],
+            [55, 60, 71, "red"],
+            [55, 70, 71, "red"],
+            [56, 70, 71, "red"],
+            [54, 56, 70, "red"],
+            [53, 56, 57, "red"],
+            [53, 57, 29, "red"],
+            [53, 54, 56, "red"],
+            [10, 29, 53, "red"],
+            [51, 59, 73, "red"],
+            [59, 72, 73, "red"],
+            [50, 72, 73, "red"],
+            [50, 58, 72, "red"],
+            [28, 29, 50, "red"],
+            [29, 50, 58, "red"],
+            [22, 29, 53, "darkred"],
+            [10, 22, 53, "darkred"],
+            [10, 22, 23, "darkred"],
+            [4, 10, 16, "darkred"],
+            [10, 16, 23, "darkred"],
 
-[5, 15, 17, "red"],
-[5, 17, 33, "darkred"],
+            //Right Side
+            [37, 46, 47, "red"], //Lower right bumper
+            [35, 37, 46, "red"], //Lower right bumper
+            [7, 35, 46, "red"], //In between lower and upper bumper
+            [7, 46, 61, "red"], //Upper bumper right side
+            [5, 7, 61, "red"], //Upper bumper right side
+            [5, 11, 61, "red"], //Right Side
+            [64, 69, 75, "red"], //Right Side bottom
+            [64, 74, 75, "red"], //Right side bottom
+            [65, 74, 75, "red"], //Right side middle
+            [63, 65, 74, "red"], //Right side middle
+            [62, 63, 65, "red"], //Right side upper
+            [62, 65, 66, "red"], //Right side upper
+            [31, 62, 66, "red"], //Right side upper
+            [11, 62, 31, "red"], //Right side upper
+            [5, 15, 17, "darkred"], //Right side rear window connection to bumper
+            [68, 49, 77, "red"], //Front right bumper
+            [68, 76, 77, "red"], //Front right bumper
+            [48, 76, 77, "red"], //Front right bumper
+            [48, 67, 76, "red"], //Front right bumper
+            [30, 67, 48, "red"], //Front right bumper
+            [30, 66, 67, "red"], //Front right bumper
+            [30, 31, 66, "red"], //Front right bumper
+            [6, 7, 34, "darkred"], //Connection between right window and right side
+            [34, 35, 7, "darkred"], //Connection between right window and right side
+            [5, 11, 33, "darkred"], //Connection between right window and right side
+            [5, 17, 33, "darkred"], //Connection between right window and right side
+            [11, 31, 32, "darkred"], //Connection between right window and right side
+            [11, 33, 32, "darkred"], //Connection between right window and right side*/
 
-[5, 33, 11, "darkred"],
-[11, 33, 31, "red"],
+            [0, 1, 3, colors.bodyDark], // I asked ChatGPT to give the car 'realistic' colors
+            [0, 3, 2, colors.bodyDark],
 
-[11, 31, 30, "red"],
-[11, 30, 48, "darkred"],
+            [4, 5, 7, colors.body],
+            [4, 7, 6, colors.body],
 
-[11, 48, 7, "darkred"],
-[7, 48, 35, "darkred"],
+            // Left spoiler side
+            [4, 8, 12, colors.bodyDark],
+            [4, 12, 10, colors.bodyDark],
 
-[48, 35, 37, "darkred"],
-[48, 37, 49, "darkred"],
+            // Right spoiler side
+            [5, 11, 13, colors.bodyLight],
+            [5, 13, 9, colors.bodyLight],
 
-[48, 49, 77, "darkred"],
-[48, 77, 30, "darkred"],
+            // Spoiler top
+            [8, 9, 13, colors.bodyLight],
+            [8, 13, 12, colors.bodyLight],
 
-[11, 5, 7, "red"], // Right side
-[10, 4, 6, "red"], // Left side
 
-[6, 7, 34, "darkred"],
-[34, 35, 7, "darkred"],
+            // Lower rear window
+            [14, 15, 17, colors.window],
+            [14, 17, 16, colors.window],
 
-],
+            // Upper rear window
+            [16, 17, 19, colors.windowLight],
+            [16, 19, 18, colors.windowLight],
+
+            // Roof
+            [18, 19, 21, colors.bodyLight],
+            [18, 21, 20, colors.bodyLight],
+
+            // Left Side Window
+            [20, 22, 23, colors.window],
+            [20, 23, 16, colors.window],
+            [20, 16, 18, colors.windowLight],
+
+            // Right Side Window
+            [21, 32, 33, colors.window],
+            [21, 33, 17, colors.window],
+            [21, 17, 19, colors.windowLight],
+
+
+            // Front
+            [28, 30, 31, colors.bodyDark],
+            [28, 31, 29, colors.bodyDark],
+
+            // Main lower bumper
+            [34, 35, 37, colors.bodyDark],
+            [34, 37, 36, colors.bodyDark],
+
+            // Side Connectors around rear window
+            [14, 15, 5, colors.bodyDeep],
+            [14, 5, 4, colors.bodyDeep],
+
+
+            // Left Side
+            [34, 36, 39, colors.body],
+            [34, 38, 39, colors.body],
+            [6, 34, 38, colors.bodyLight],
+            [6, 38, 52, colors.bodyLight],
+            [4, 6, 52, colors.bodyLight],
+            [4, 10, 52, colors.body],
+            [4, 14, 16, colors.bodyDeep],
+
+            [55, 60, 71, colors.body],
+            [55, 70, 71, colors.bodyLight],
+            [56, 70, 71, colors.bodyLight],
+            [54, 56, 70, colors.body],
+
+            [53, 56, 57, colors.body],
+            [53, 57, 29, colors.bodyDark],
+            [53, 54, 56, colors.body],
+            [10, 29, 53, colors.body],
+
+            [51, 59, 73, colors.body],
+            [59, 72, 73, colors.bodyLight],
+            [50, 72, 73, colors.bodyLight],
+            [50, 58, 72, colors.body],
+
+            [28, 29, 50, colors.bodyDark],
+            [29, 50, 58, colors.bodyDark],
+
+            [22, 29, 53, colors.bodyDeep],
+            [10, 22, 53, colors.bodyDeep],
+            [10, 22, 23, colors.bodyDeep],
+            [4, 10, 16, colors.bodyDeep],
+            [10, 16, 23, colors.bodyDeep],
+
+
+            // Right Side
+            [37, 46, 47, colors.bodyDark],
+            [35, 37, 46, colors.bodyDark],
+            [7, 35, 46, colors.body],
+            [7, 46, 61, colors.bodyLight],
+            [5, 7, 61, colors.bodyLight],
+            [5, 11, 61, colors.bodyLight],
+
+            [64, 69, 75, colors.body],
+            [64, 74, 75, colors.body],
+            [65, 74, 75, colors.bodyLight],
+            [63, 65, 74, colors.bodyLight],
+            [62, 63, 65, colors.bodyLight],
+            [62, 65, 66, colors.bodyLight],
+
+            [31, 62, 66, colors.body],
+            [11, 62, 31, colors.body],
+
+            [5, 15, 17, colors.bodyDeep],
+
+            [68, 49, 77, colors.body],
+            [68, 76, 77, colors.body],
+            [48, 76, 77, colors.bodyLight],
+            [48, 67, 76, colors.bodyLight],
+            [30, 67, 48, colors.body],
+            [30, 66, 67, colors.body],
+            [30, 31, 66, colors.body],
+
+            [6, 7, 34, colors.bodyDeep],
+            [34, 35, 7, colors.bodyDeep],
+            [5, 11, 33, colors.bodyDeep],
+            [5, 17, 33, colors.bodyDeep],
+            [11, 31, 32, colors.bodyDeep],
+            [11, 33, 32, colors.bodyDeep]
+
+
+],  
 
     }
 }
@@ -531,10 +628,11 @@ export const environment = {
             { x:  1,  y: -1,  z: 3}, //Bottom right
             { x:  1,  y: 1,  z: 3}, //Top right
             //Lane markers
-            { x:  -.33,  y: -1,  z: 1.5},
-            { x:  -.33,  y: -1,  z: 2.5},
-            { x:  .33,  y: -1,  z: 1.5},
-            { x:  .33,  y: -1,  z: 2.5},
+            { x:  -.33,  y: -1,  z: 1.5}, //8
+            { x:  -.33,  y: -1,  z: 2.5}, //9
+            { x:  .33,  y: -1,  z: 1.5}, //10
+            { x:  .33,  y: -1,  z: 2.5}, //11
+
         ],
 
         edges: [
@@ -566,6 +664,7 @@ export const environment = {
             // Right
             [2, 3, 6, "gray"],
             [3, 6, 7, "gray"],
+
         ]
     }
 }
@@ -681,7 +780,7 @@ export const road_hazard = {
         ],
 
         triangles: [
-
+            /*
             // FRONT TOP BOARD
             [0, 1, 2, "orange"],
             [1, 3, 2, "orange"],
@@ -762,8 +861,144 @@ export const road_hazard = {
             [15, 18, 33, "orange"],
 
             [13, 32, 12, "orange"],
-            [15, 33, 14, "orange"],
-        ]
+            [15, 33, 14, "orange"],*/
+
+    // =========================
+    // FRONT TOP BOARD
+    // =========================
+    [0, 1, 2, hazardColors.signFront],
+    [1, 3, 2, hazardColors.signFront],
+
+
+    // =========================
+    // FRONT MIDDLE BOARD
+    // =========================
+    [4, 5, 6, hazardColors.signFront],
+    [5, 7, 6, hazardColors.signFront],
+
+
+    // =========================
+    // FRONT BOTTOM BOARD
+    // =========================
+    [8, 9, 10, hazardColors.signFront],
+    [9, 11, 10, hazardColors.signFront],
+
+
+    // =========================
+    // BACK TOP BOARD
+    // =========================
+    [20, 22, 21, hazardColors.signBack],
+    [21, 22, 23, hazardColors.signBack],
+
+
+    // =========================
+    // BACK MIDDLE BOARD
+    // =========================
+    [24, 26, 25, hazardColors.signBack],
+    [25, 26, 27, hazardColors.signBack],
+
+
+    // =========================
+    // BACK BOTTOM BOARD
+    // =========================
+    [28, 30, 29, hazardColors.signBack],
+    [29, 30, 31, hazardColors.signBack],
+
+
+    // =========================
+    // TOP BOARD - LEFT SIDE
+    // =========================
+    [0, 20, 1, hazardColors.signSide],
+    [1, 20, 21, hazardColors.signSide],
+
+
+    // =========================
+    // TOP BOARD - RIGHT SIDE
+    // =========================
+    [2, 3, 22, hazardColors.signSideLight],
+    [3, 23, 22, hazardColors.signSideLight],
+
+
+    // =========================
+    // TOP BOARD - TOP
+    // =========================
+    [0, 2, 20, hazardColors.signFrontLight],
+    [2, 22, 20, hazardColors.signFrontLight],
+
+
+    // =========================
+    // TOP BOARD - BOTTOM
+    // =========================
+    [1, 21, 3, hazardColors.signBottom],
+    [3, 21, 23, hazardColors.signBottom],
+
+
+    // =========================
+    // MIDDLE BOARD - LEFT SIDE
+    // =========================
+    [4, 24, 5, hazardColors.signSide],
+    [5, 24, 25, hazardColors.signSide],
+
+
+    // =========================
+    // MIDDLE BOARD - RIGHT SIDE
+    // =========================
+    [6, 7, 26, hazardColors.signSideLight],
+    [7, 27, 26, hazardColors.signSideLight],
+
+
+    // =========================
+    // MIDDLE BOARD - TOP
+    // =========================
+    [4, 6, 24, hazardColors.signFrontLight],
+    [6, 26, 24, hazardColors.signFrontLight],
+
+
+    // =========================
+    // MIDDLE BOARD - BOTTOM
+    // =========================
+    [5, 25, 7, hazardColors.signBottom],
+    [7, 25, 27, hazardColors.signBottom],
+
+
+    // =========================
+    // BOTTOM BOARD - LEFT SIDE
+    // =========================
+    [8, 28, 9, hazardColors.signSide],
+    [9, 28, 29, hazardColors.signSide],
+
+
+    // =========================
+    // BOTTOM BOARD - RIGHT SIDE
+    // =========================
+    [10, 11, 30, hazardColors.signSideLight],
+    [11, 31, 30, hazardColors.signSideLight],
+
+
+    // =========================
+    // BOTTOM BOARD - TOP
+    // =========================
+    [8, 10, 28, hazardColors.signFrontLight],
+    [10, 30, 28, hazardColors.signFrontLight],
+
+
+    // =========================
+    // BOTTOM BOARD - BOTTOM
+    // =========================
+    [9, 29, 11, hazardColors.signBottom],
+    [11, 29, 31, hazardColors.signBottom],
+
+
+    // =========================
+    // SUPPORT / BASE
+    // =========================
+    [13, 16, 32, hazardColors.support],
+    [15, 18, 33, hazardColors.support],
+
+    [13, 32, 12, hazardColors.supportLight],
+    [15, 33, 14, hazardColors.supportLight],
+
+],
 
     }
 }
